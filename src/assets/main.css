@@ -1,0 +1,104 @@
+@font-face {
+  font-family: 'Alibaba PuHuiTi 3.0';
+  src:
+    url('./fonts/AlibabaPuHuiTi-3.0-Regular.woff2') format('woff2'),
+    url('./fonts/AlibabaPuHuiTi-3.0-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DingTalk JinBuTi';
+  src: url('./fonts/DingTalkJinBuTi.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light dark;
+  font-family:
+    'Alibaba PuHuiTi 3.0',
+    'Segoe UI',
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'PingFang SC',
+    sans-serif;
+  --color-bg-light: #f2f2f2;
+  --color-bg-dark: #121212;
+  --color-surface-light: #ffffff;
+  --color-surface-dark: #3a3a3c;
+  --color-border: rgba(10, 53, 101, 0.12);
+  --color-border-dark: rgba(255, 255, 255, 0.08);
+  --color-primary: #006eff;
+  --color-primary-deep: #0a3565;
+  --color-primary-soft: rgba(0, 110, 255, 0.14);
+  --color-secondary: #5ac8fa;
+  --color-secondary-soft: rgba(90, 200, 250, 0.16);
+  --color-coral: #f58220;
+  --color-text-light: #3a3a3c;
+  --color-text-muted: #767680;
+  --color-text-dark: #f2f2f2;
+  --color-text-muted-dark: rgba(242, 242, 242, 0.64);
+  --color-success: #35c759;
+  --color-panel: #ffffff;
+}
+
+body {
+  margin: 0;
+  background:
+    linear-gradient(180deg, rgba(0, 110, 255, 0.06) 0%, rgba(0, 110, 255, 0) 40%),
+    var(--color-bg-light);
+  color: var(--color-text-light);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+  font-feature-settings:
+    'rlig' 1,
+    'calt' 1;
+}
+
+body[data-theme='dark'] {
+  background: var(--color-bg-dark);
+  color: var(--color-text-dark);
+  --color-surface-light: #1f2432;
+  --color-border: rgba(255, 255, 255, 0.12);
+  --color-primary: #5ac8fa;
+  --color-primary-deep: #5ac8fa;
+  --color-primary-soft: rgba(90, 200, 250, 0.22);
+  --color-secondary-soft: rgba(90, 200, 250, 0.3);
+  --color-text-light: #f2f2f2;
+  --color-text-muted: rgba(242, 242, 242, 0.68);
+  --color-panel: #1f2432;
+}
+
+a:hover {
+  color: var(--color-primary);
+}
+
+body[data-theme='dark'] a:hover {
+  color: var(--color-secondary);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+.headline-strong {
+  font-family:
+    'DingTalk JinBuTi',
+    'Alibaba PuHuiTi 3.0',
+    'Segoe UI',
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'PingFang SC',
+    sans-serif;
+  letter-spacing: 0.02em;
+}
