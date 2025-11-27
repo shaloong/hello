@@ -1,24 +1,42 @@
+
 import dayjs, { Dayjs } from 'dayjs';
 import type { CalendarDay, CalendarMonth } from '@/types/portal';
 
-const HOLIDAYS = new Set<string>(['01-01', '05-01', '10-01', '10-02', '10-03']);
+const WEEK_START = 1; // Monday
 
-const buildCalendarDay = (date: Dayjs): CalendarDay => ({
+const buildCalendarDay = (date: Dayjs, holidays: Set<string>): CalendarDay => ({
 	date: date.format('YYYY-MM-DD'),
 	isToday: date.isSame(dayjs(), 'day'),
 	isWeekend: [0, 6].includes(date.day()),
-	isHoliday: HOLIDAYS.has(date.format('MM-DD')),
+	isHoliday: holidays.has(date.format('YYYY-MM-DD')),
 	schedules: []
 });
 
-export const buildCalendarMonth = (reference: Dayjs = dayjs()): CalendarMonth => {
+const getCalendarStartCursor = (reference: Dayjs): Dayjs => {
 	const start = reference.startOf('month');
-	const startCursor = start.startOf('week');
+	const offset = (start.day() - WEEK_START + 7) % 7;
+	return start.subtract(offset, 'day');
+};
+
+export const getCalendarYearSpan = (reference: Dayjs = dayjs()): { startYear: number; endYear: number } => {
+	const startCursor = getCalendarStartCursor(reference);
+	const endCursor = startCursor.add(41, 'day');
+	return {
+		startYear: startCursor.year(),
+		endYear: endCursor.year()
+	};
+};
+
+export const buildCalendarMonth = (
+	reference: Dayjs = dayjs(),
+	holidaySet: Set<string> = new Set()
+): CalendarMonth => {
+	const startCursor = getCalendarStartCursor(reference);
 	const days: CalendarDay[] = [];
 
 	for (let i = 0; i < 42; i += 1) {
 		const current = startCursor.add(i, 'day');
-		days.push(buildCalendarDay(current));
+		days.push(buildCalendarDay(current, holidaySet));
 	}
 
 	const weeks: CalendarDay[][] = [];

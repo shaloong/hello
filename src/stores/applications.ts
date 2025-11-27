@@ -59,26 +59,34 @@ const seedApplications: PortalApplication[] = [
 
   // 公开/云服务
   {
-    id: 'ms-teams',
-    name: 'Microsoft Teams',
-    description: '视频会议与跨团队协作工具。',
-    url: 'https://teams.microsoft.com/',
+    id: 'feishu',
+    name: '飞书',
+    description: '企业级协作与办公平台。',
+    url: 'https://applink.feishu.cn/client/chat/open',
     category: 'communication',
     tags: ['会议', '聊天']
   },
   {
-    id: 'jira',
-    name: 'Jira',
-    description: '研发项目管理与需求追踪平台。',
-    url: 'https://jira.example.com',
-    category: 'development',
-    tags: ['敏捷', 'Scrum', 'Issue']
+    id: 'feishu-mail',
+    name: '飞书邮箱',
+    description: '企业邮件服务入口。',
+    url: 'https://shaloong.feishu.cn/mail',
+    category: 'communication',
+    tags: ['邮件', '协作']
   },
   {
-    id: 'gitlab',
-    name: 'GitLab',
-    description: '代码托管、CI/CD 与 DevOps 集成平台。',
-    url: 'https://gitlab.example.com',
+    id: 'feishu-docs',
+    name: '飞书云文档',
+    description: '飞书云文档与知识库首页。',
+    url: 'https://shaloong.feishu.cn/drive/home/',
+    category: 'communication',
+    tags: ['文档', '协作']
+  },
+  {
+    id: 'github',
+    name: 'GitHub 仓库',
+    description: '协作开发和代码托管仓库。',
+    url: 'https://github.com/shaloong',
     category: 'development',
     tags: ['Git', 'CI/CD', 'DevOps']
   },
@@ -102,15 +110,15 @@ const seedApplications: PortalApplication[] = [
     id: 'miro',
     name: 'Miro',
     description: '在线白板与头脑风暴协作平台。',
-    url: 'https://miro.com/',
+    url: 'https://miro.com/app/dashboard/',
     category: 'design',
     tags: ['白板', 'Workshop']
   },
   {
     id: 'okr-center',
     name: 'OKR 中心',
-    description: '公司级目标管理与跟踪平台。',
-    url: 'https://okr.example.com',
+    description: '目标管理与跟踪平台。',
+    url: 'https://shaloong.feishu.cn/okr',
     category: 'management',
     tags: ['目标', '绩效']
   },
@@ -121,22 +129,6 @@ const seedApplications: PortalApplication[] = [
     url: 'https://www.notion.so/',
     category: 'productivity',
     tags: ['知识库', '项目', '模板']
-  },
-  {
-    id: 'power-automate',
-    name: 'Power Automate',
-    description: '自动化工作流与系统集成服务。',
-    url: 'https://make.powerautomate.com/',
-    category: 'productivity',
-    tags: ['自动化', '集成']
-  },
-  {
-    id: 'looker',
-    name: 'Looker Studio',
-    description: '商业智能报表与自助数据分析。',
-    url: 'https://lookerstudio.google.com/',
-    category: 'analytics',
-    tags: ['BI', 'Dashboard']
   },
   {
     id: 'metabase',

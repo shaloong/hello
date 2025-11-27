@@ -26,14 +26,19 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import dayjs from 'dayjs';
-import { buildCalendarMonth } from '@/services/calendar';
+import { buildCalendarMonth, getCalendarYearSpan } from '@/services/calendar';
+import { detectCountryCode, loadPublicHolidays } from '@/services/holidays';
 
 const reference = ref(dayjs());
-const calendar = computed(() => buildCalendarMonth(reference.value));
+const countryCode = ref(detectCountryCode());
+const holidays = ref<Set<string>>(new Set());
+let requestId = 0;
 
-const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
+const calendar = computed(() => buildCalendarMonth(reference.value, holidays.value));
+
+const weekDays = ['一', '二', '三', '四', '五', '六', '日'];
 const flatDays = computed(() => calendar.value.weeks.flat());
 
 const goPrev = () => {
@@ -44,6 +49,27 @@ const goNext = () => {
 };
 
 const dayLabel = (date: string) => Number.parseInt(date.slice(-2), 10);
+
+const refreshHolidays = async () => {
+  const { startYear, endYear } = getCalendarYearSpan(reference.value);
+  const years = startYear === endYear ? [startYear] : [startYear, endYear];
+  const runId = ++requestId;
+  try {
+    const result = await loadPublicHolidays(years, countryCode.value);
+    if (requestId === runId) {
+      holidays.value = new Set(result);
+    }
+  } catch (error) {
+    console.warn('[calendar] holiday refresh failed', error);
+    if (requestId === runId) {
+      holidays.value = new Set();
+    }
+  }
+};
+
+watch(reference, () => {
+  refreshHolidays();
+}, { immediate: true });
 </script>
 
 <style scoped>
