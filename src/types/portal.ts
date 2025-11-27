@@ -45,10 +45,20 @@ export interface CalendarDay {
   isToday: boolean;
   isWeekend: boolean;
   isHoliday: boolean;
+  isRestDay: boolean;
+  holidayName?: string;
+  isWorkdayOverride?: boolean;
   schedules: string[];
 }
 
 export interface CalendarMonth {
   monthLabel: string;
   weeks: CalendarDay[][];
+}
+
+export interface HolidaySummary {
+  date: string;
+  name: string;
+  isHoliday: boolean;
+  isWorkday: boolean;
 }

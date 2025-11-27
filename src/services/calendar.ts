@@ -1,16 +1,35 @@
 
 import dayjs, { Dayjs } from 'dayjs';
-import type { CalendarDay, CalendarMonth } from '@/types/portal';
+import type { CalendarDay, CalendarMonth, HolidaySummary } from '@/types/portal';
 
 const WEEK_START = 1; // Monday
 
-const buildCalendarDay = (date: Dayjs, holidays: Set<string>): CalendarDay => ({
-	date: date.format('YYYY-MM-DD'),
-	isToday: date.isSame(dayjs(), 'day'),
-	isWeekend: [0, 6].includes(date.day()),
-	isHoliday: holidays.has(date.format('YYYY-MM-DD')),
-	schedules: []
-});
+const buildHolidayMap = (summaries: HolidaySummary[]): Map<string, HolidaySummary> => {
+	const map = new Map<string, HolidaySummary>();
+	for (const summary of summaries) {
+		map.set(summary.date, summary);
+	}
+	return map;
+};
+
+const buildCalendarDay = (date: Dayjs, holidayMap: Map<string, HolidaySummary>): CalendarDay => {
+	const isoDate = date.format('YYYY-MM-DD');
+	const metadata = holidayMap.get(isoDate);
+	const isWeekend = [0, 6].includes(date.day());
+	const isHoliday = Boolean(metadata?.isHoliday);
+	const isWorkdayOverride = isWeekend && metadata?.isWorkday === true;
+	const isRestDay = isHoliday || (!isWorkdayOverride && isWeekend);
+	return {
+		date: isoDate,
+		isToday: date.isSame(dayjs(), 'day'),
+		isWeekend,
+		isHoliday,
+		isRestDay,
+		holidayName: isHoliday ? metadata?.name : undefined,
+		isWorkdayOverride,
+		schedules: []
+	};
+};
 
 const getCalendarStartCursor = (reference: Dayjs): Dayjs => {
 	const start = reference.startOf('month');
@@ -29,14 +48,15 @@ export const getCalendarYearSpan = (reference: Dayjs = dayjs()): { startYear: nu
 
 export const buildCalendarMonth = (
 	reference: Dayjs = dayjs(),
-	holidaySet: Set<string> = new Set()
+	holidaySummaries: HolidaySummary[] = []
 ): CalendarMonth => {
 	const startCursor = getCalendarStartCursor(reference);
 	const days: CalendarDay[] = [];
+	const holidayMap = buildHolidayMap(holidaySummaries);
 
 	for (let i = 0; i < 42; i += 1) {
 		const current = startCursor.add(i, 'day');
-		days.push(buildCalendarDay(current, holidaySet));
+		days.push(buildCalendarDay(current, holidayMap));
 	}
 
 	const weeks: CalendarDay[][] = [];

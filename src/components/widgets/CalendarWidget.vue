@@ -13,10 +13,12 @@
       </div>
       <div v-for="item in flatDays" :key="item.date" class="day-cell" :class="{
         today: item.isToday,
-        holiday: item.isHoliday,
-        weekend: item.isWeekend
+        weekend: item.isWeekend,
+        'rest-day': item.isRestDay,
+        'workday-override': item.isWorkdayOverride
       }">
         <span class="date">{{ dayLabel(item.date) }}</span>
+        <small v-if="item.holidayName" class="holiday-name">{{ item.holidayName }}</small>
         <ul v-if="item.schedules.length" class="schedule">
           <li v-for="schedule in item.schedules" :key="schedule">{{ schedule }}</li>
         </ul>
@@ -30,10 +32,11 @@ import { computed, ref, watch } from 'vue';
 import dayjs from 'dayjs';
 import { buildCalendarMonth, getCalendarYearSpan } from '@/services/calendar';
 import { detectCountryCode, loadPublicHolidays } from '@/services/holidays';
+import type { HolidaySummary } from '@/types/portal';
 
 const reference = ref(dayjs());
 const countryCode = ref(detectCountryCode());
-const holidays = ref<Set<string>>(new Set());
+const holidays = ref<HolidaySummary[]>([]);
 let requestId = 0;
 
 const calendar = computed(() => buildCalendarMonth(reference.value, holidays.value));
@@ -57,17 +60,17 @@ const refreshHolidays = async () => {
   try {
     const result = await loadPublicHolidays(years, countryCode.value);
     if (requestId === runId) {
-      holidays.value = new Set(result);
+      holidays.value = result;
     }
   } catch (error) {
     console.warn('[calendar] holiday refresh failed', error);
     if (requestId === runId) {
-      holidays.value = new Set();
+      holidays.value = [];
     }
   }
 };
 
-watch(reference, () => {
+watch([reference, countryCode], () => {
   refreshHolidays();
 }, { immediate: true });
 </script>
@@ -142,8 +145,13 @@ header h3 {
   background: var(--color-secondary-soft);
 }
 
-.day-cell.holiday {
-  border-color: rgba(245, 130, 32, 0.45);
+.day-cell.rest-day {
+  background: var(--color-secondary-soft);
+  border-color: rgba(10, 53, 101, 0.16);
+}
+
+.day-cell.workday-override {
+  background: var(--color-panel);
 }
 
 .day-cell.today {
@@ -153,6 +161,11 @@ header h3 {
 
 .date {
   font-weight: 600;
+}
+
+.holiday-name {
+  font-size: 11px;
+  color: var(--color-text-muted);
 }
 
 .schedule {
@@ -173,7 +186,8 @@ header h3 {
   color: var(--color-text-muted-dark);
 }
 
-:deep(body[data-theme='dark']) .day-cell.weekend {
+:deep(body[data-theme='dark']) .day-cell.weekend,
+:deep(body[data-theme='dark']) .day-cell.rest-day {
   background: rgba(90, 200, 250, 0.26);
 }
 </style>
