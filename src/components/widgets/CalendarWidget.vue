@@ -121,7 +121,7 @@ header h3 {
 
 .calendar-grid {
   display: grid;
-  grid-template-columns: repeat(7, minmax(90px, 1fr));
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 6px;
   font-size: 12px;
 }

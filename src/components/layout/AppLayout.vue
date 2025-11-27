@@ -42,7 +42,7 @@ defineProps<{ theme: string }>();
 
 .app-main {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 320px;
+  grid-template-columns: minmax(0, 1fr) 360px;
   gap: 24px;
   align-items: start;
 }
