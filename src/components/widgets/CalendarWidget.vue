@@ -7,25 +7,21 @@
         <button type="button" @click="goNext">→</button>
       </div>
     </header>
-    <div class="calendar-scroll">
-      <div class="calendar-grid">
-        <div v-for="day in weekDays" :key="day" class="weekday">
-          {{ day }}
-        </div>
-        <div v-for="item in flatDays" :key="item.date" class="day-cell" :class="{
-          today: item.isToday,
-          weekend: item.isWeekend,
-          'rest-day': item.isRestDay,
-          'workday-override': item.isWorkdayOverride
-        }">
-          <div class="day-header">
-            <span class="date">{{ dayLabel(item.date) }}</span>
-            <small v-if="item.holidayName" class="holiday-name">{{ item.holidayName }}</small>
-          </div>
-          <ul v-if="item.schedules.length" class="schedule">
-            <li v-for="schedule in item.schedules" :key="schedule">{{ schedule }}</li>
-          </ul>
-        </div>
+    <div class="calendar-grid">
+      <div v-for="day in weekDays" :key="day" class="weekday">
+        {{ day }}
+      </div>
+      <div v-for="item in flatDays" :key="item.date" class="day-cell" :class="{
+        today: item.isToday,
+        weekend: item.isWeekend,
+        'rest-day': item.isRestDay,
+        'workday-override': item.isWorkdayOverride
+      }">
+        <span class="date">{{ dayLabel(item.date) }}</span>
+        <small v-if="item.holidayName" class="holiday-name">{{ item.holidayName }}</small>
+        <ul v-if="item.schedules.length" class="schedule">
+          <li v-for="schedule in item.schedules" :key="schedule">{{ schedule }}</li>
+        </ul>
       </div>
     </div>
   </section>
@@ -123,17 +119,11 @@ header h3 {
 }
 
 
-.calendar-scroll {
-  overflow-x: auto;
-  padding-bottom: 4px;
-}
-
 .calendar-grid {
   display: grid;
-  grid-template-columns: repeat(7, minmax(110px, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(7, minmax(90px, 1fr));
+  gap: 6px;
   font-size: 12px;
-  min-width: 820px;
 }
 
 .weekday {
@@ -143,20 +133,13 @@ header h3 {
 }
 
 .day-cell {
-  min-height: 92px;
+  min-height: 86px;
   border-radius: 12px;
   padding: 8px;
   border: 1px solid rgba(10, 53, 101, 0.08);
   display: flex;
   flex-direction: column;
   gap: 4px;
-}
-
-.day-header {
-  display: flex;
-  gap: 6px;
-  align-items: baseline;
-  justify-content: space-between;
 }
 
 .day-cell.weekend {
@@ -186,10 +169,6 @@ header h3 {
   font-size: 11px;
   color: var(--color-text-muted);
   display: block;
-  margin-left: auto;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .schedule {
