@@ -123,20 +123,21 @@ const seedApplications: PortalApplication[] = [
     tags: ['目标', '绩效']
   },
   {
-    id: 'notion',
-    name: 'Notion',
-    description: '知识管理与个人效率工具。',
-    url: 'https://www.notion.so/',
-    category: 'productivity',
-    tags: ['知识库', '项目', '模板']
-  },
-  {
     id: 'metabase',
     name: 'Metabase',
     description: '开源数据可视化与查询平台。',
     url: 'http://obsidian:48080/',
     category: 'analytics',
     tags: ['SQL', '报表']
+  }
+  ,
+  {
+    id: 'airflow',
+    name: 'Airflow',
+    description: '数据工作流编排与调度平台。',
+    url: 'http://obsidian:30001/',
+    category: 'analytics',
+    tags: ['ETL', '调度']
   }
 ];
 
